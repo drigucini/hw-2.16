@@ -1,19 +1,40 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
         Random random = new Random();
-        Integer[] mergeSort = new Integer[99];
-        for (int i = 0; i < mergeSort.length; i++) {
-            mergeSort[i] = random.nextInt(100);
+        int[] array1 = new int[99];
+        for (int i = 0; i < array1.length; i++) {
+            array1[i] = random.nextInt(100);
         }
 
-        long start = System.currentTimeMillis();
-        sortByMerge(mergeSort, 0, mergeSort.length - 1);
-        System.out.println(System.currentTimeMillis() - start);
-    }
 
+//        sortByMerge(mergeSort, 0, mergeSort.length - 1);
+//        System.out.println(System.currentTimeMillis() - start);
+
+//        int[] array2 = Arrays.copyOf(array1, array1.length);
+//        long start = System.currentTimeMillis();
+//        sortBubble(array2);
+//        System.out.println(System.currentTimeMillis() - start);
+
+
+    }
+//    private static void swapElements(int[] arr, int indexA, int indexB) {
+//        int tmp = arr[indexA];
+//        arr[indexA] = arr[indexB];
+//        arr[indexB] = tmp;
+//    }
+//    public static void sortBubble(int[] arr) {
+//        for (int i = 0; i < arr.length - 1; i++) {
+//            for (int j = 0; j < arr.length - 1 - i; j++) {
+//                if (arr[j] > arr[j + 1]) {
+//                    swapElements(arr, j, j + 1);
+//                }
+//            }
+//        }
+//    }
     public static void sortByMerge(Integer[] arrayInteger, int indexStart, int indexEnd) {
         if (indexEnd - indexStart >= 1) {
             int middle = (indexStart + indexEnd) / 2;

@@ -69,7 +69,9 @@ public class IntegerListArray implements IntegerList {
     @Override
     public boolean contains(Integer item) {
         validateItem(item);
-        return indexOf(item) != -1;
+        sort(arrayInteger);
+
+        return binarySearch(arrayInteger, item);
     }
 
     @Override
@@ -142,5 +144,34 @@ public class IntegerListArray implements IntegerList {
             throw new InvalidIndexException();
         }
     }
+    private static void sort(Integer[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int temp = arr[i];
+            int j = i;
+            while (j > 0 && arr[j - 1] >= temp) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = temp;
+        }
+    }
+    private static boolean binarySearch(Integer[] arr, Integer item) {
+        int min = 0;
+        int max = arr.length - 1;
 
+        while (min <= max) {
+            int mid = (min + max) / 2;
+
+            if (item == arr[mid]) {
+                return true;
+            }
+
+            if (item < arr[mid]) {
+                max = mid - 1;
+            } else {
+                min = mid + 1;
+            }
+        }
+        return false;
+    }
 }
