@@ -13,17 +13,18 @@ public class IntegerListArray implements IntegerList {
 
     @Override
     public Integer add(Integer item) {
-        validateSize();
+        growIfNeeded();
         validateItem(item);
+        grow();
         arrayInteger[size++] = item;
         return item;
     }
 
     @Override
     public Integer add(int index, Integer item){
+        growIfNeeded();
         validateItem(item);
         validateIndex(index);
-        validateSize();
 
         if (index == size) {
             arrayInteger[size++] = item;
@@ -70,7 +71,6 @@ public class IntegerListArray implements IntegerList {
     public boolean contains(Integer item) {
         validateItem(item);
         sort(arrayInteger);
-
         return binarySearch(arrayInteger, item);
     }
 
@@ -133,10 +133,14 @@ public class IntegerListArray implements IntegerList {
             throw new NullItemException();
         }
     }
-    private void validateSize () {
+    private void growIfNeeded() {
         if (size >= arrayInteger.length) {
-            throw new StorageIsFullException();
+            grow();
         }
+    }
+
+    private void grow() {
+        Arrays.copyOf(arrayInteger, size + size / 2);
     }
 
     private void validateIndex(int index) {
@@ -144,15 +148,32 @@ public class IntegerListArray implements IntegerList {
             throw new InvalidIndexException();
         }
     }
-    private static void sort(Integer[] arr) {
-        for (int i = 1; i < arr.length; i++) {
-            int temp = arr[i];
-            int j = i;
-            while (j > 0 && arr[j - 1] >= temp) {
-                arr[j] = arr[j - 1];
-                j--;
+
+    private void sort(Integer[] arrayInteger) {
+        sortByMerge(arrayInteger, 0, arrayInteger.length - 1);
+    }
+    private static void sortByMerge(Integer[] arrayInteger, int indexStart, int indexEnd) {
+        if (indexEnd - indexStart >= 1) {
+            int middle = (indexStart + indexEnd) / 2;
+            sortByMerge(arrayInteger, indexStart, middle);
+            sortByMerge(arrayInteger, middle + 1, indexEnd);
+
+            int[] resultingArray = new int[indexEnd - indexStart + 1];
+            int leftIndex = indexStart;
+            int rightIndex = middle + 1;
+
+            for (int i = indexStart; i <= indexEnd; i++) {
+                if (leftIndex > middle || (rightIndex <= indexEnd && arrayInteger[leftIndex] > arrayInteger[rightIndex])) {
+                    resultingArray[i - indexStart] = arrayInteger[rightIndex];
+                    rightIndex++;
+                } else {
+                    resultingArray[i - indexStart] = arrayInteger[leftIndex];
+                    leftIndex++;
+                }
             }
-            arr[j] = temp;
+            for (int i = indexStart; i <= indexEnd; i++) {
+                arrayInteger[i] = resultingArray[i - indexStart];
+            }
         }
     }
     private static boolean binarySearch(Integer[] arr, Integer item) {
