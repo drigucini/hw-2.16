@@ -166,6 +166,7 @@ public class IntegerListArray implements IntegerList {
                 return true;
             }
 
+
             if (item < arr[mid]) {
                 max = mid - 1;
             } else {
